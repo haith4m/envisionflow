@@ -25,6 +25,7 @@ if (isset($_SESSION['blueprintData'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+     <link rel="icon" type="image/x-icon" href="logo.jpg">
     <style>
         /* CSS Variables */
         :root {
@@ -934,7 +935,7 @@ if (isset($_SESSION['blueprintData'])) {
         // Utility functions
         function toTitleCase(str) {
             return str.replace(/_/g, ' ')
-                       .replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+                     .replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
         }
 
         function getRandomId() {
@@ -1018,7 +1019,7 @@ if (isset($_SESSION['blueprintData'])) {
                 right: 20px;
                 padding: 1rem 1.5rem;
                 background: ${type === 'success' ? 'var(--success-color)' : 
-                            type === 'error' ? 'var(--error-color)' : 'var(--info-color)'};
+                           type === 'error' ? 'var(--error-color)' : 'var(--info-color)'};
                 color: white;
                 border-radius: 12px;
                 font-weight: 500;

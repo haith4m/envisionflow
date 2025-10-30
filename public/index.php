@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="logo.webp">
+    
     <style>
         :root {
             --dark-bg: #0A0A0A;
@@ -27,6 +29,8 @@
 
             --gradient-start: #B16CEA;
             --gradient-end: #6CEAC7;
+            --accent-orange: #FF6B35;
+            --accent-pink: #FF10F0;
 
             --transition-speed: 0.3s ease;
         }
@@ -36,10 +40,22 @@
             100% { background-position: 100% 100%; }
         }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         body {
             background-color: var(--dark-bg);
-            background-image: radial-gradient(at 0% 100%, rgba(108, 234, 199, 0.18) 0, transparent 50%),
-                              radial-gradient(at 100% 0%, rgba(177, 108, 234, 0.18) 0, transparent 50%);
+            background-image: 
+                radial-gradient(at 0% 100%, rgba(108, 234, 199, 0.18) 0, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(177, 108, 234, 0.18) 0, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(255, 107, 53, 0.1) 0, transparent 50%);
             background-size: 200% 200%;
             animation: gradient-flow 30s ease infinite alternate;
             color: var(--dark-text);
@@ -48,8 +64,51 @@
             padding: 0;
             box-sizing: border-box;
             position: relative;
+            overflow-x: hidden;
         }
         
+        body::before {
+            content: '';
+            position: fixed;
+            top: 5%;
+            right: -5%;
+            width: 500px;
+            height: 500px;
+            background-image: url('blob.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.8;
+            animation: float 20s ease-in-out infinite, spin 40s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(8px) brightness(1.3);
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 10%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background-image: url('blob.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.7;
+            animation: float 25s ease-in-out infinite reverse, spin 50s linear infinite reverse;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(10px) brightness(1.2) hue-rotate(80deg);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
         body.light-mode {
             background-color: var(--light-bg);
             background-image: radial-gradient(at 0% 100%, rgba(108, 234, 199, 0.25) 0, transparent 50%),
@@ -131,6 +190,8 @@
         }
         main {
             width: 100%;
+            position: relative;
+            z-index: 1;
         }
 
         /* Nav Bar */
@@ -154,6 +215,15 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             user-select: none;
+            position: relative;
+        }
+        .navbar .logo::after {
+            content: '✨';
+            position: absolute;
+            right: -25px;
+            top: -5px;
+            font-size: 0.8rem;
+            animation: pulse 2s ease-in-out infinite;
         }
         .nav-links {
             list-style: none;
@@ -195,6 +265,21 @@
             font-size: 1rem;
             box-shadow: 0 6px 12px rgba(108, 234, 199, 0.4);
             transition: all var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .cta-button:hover::before {
+            left: 100%;
         }
         .cta-button:hover, .cta-button:focus {
             filter: brightness(1.15);
@@ -217,7 +302,7 @@
             transition: all var(--transition-speed);
         }
         .mode-toggle:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(15deg);
             background-color: var(--gradient-end);
             border-color: var(--gradient-end);
         }
@@ -233,38 +318,42 @@
             color: var(--light-text);
         }
 
-        /* Hero Section */
+        /* Hero Section - Compact */
         .hero {
             text-align: center;
-            padding: 8rem 2rem 4rem;
+            padding: 3rem 2rem 1.5rem;
             max-width: 900px;
             margin: 0 auto;
+            position: relative;
         }
         .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 900;
             letter-spacing: -0.05em;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end), var(--accent-orange));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             user-select: none;
+            line-height: 1.1;
         }
         .hero p {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
             color: var(--dark-secondary-text);
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            max-width: 600px;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            max-width: 650px;
             margin-left: auto;
             margin-right: auto;
         }
         .hero-buttons {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
+            margin-bottom: 0;
         }
+
         .cta-button-secondary {
             padding: 0.75rem 1.75rem;
             background-color: transparent;
@@ -278,6 +367,7 @@
             background-color: var(--gradient-end);
             color: #121212;
             text-decoration: none;
+            transform: translateY(-2px);
         }
         body.light-mode .cta-button-secondary {
             color: var(--gradient-start);
@@ -290,16 +380,16 @@
 
         /* Main Content */
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 2rem 4rem;
         }
 
-        /* Hand-drawn Cloud Prompt Section */
+        /* Hand-drawn Cloud Prompt Section - Closer to hero */
         .prompt-section-container {
             max-width: 900px;
-            margin: 4rem auto;
-            padding: 3rem 2rem;
+            margin: 1.5rem auto 3rem;
+            padding: 0 2rem 2rem;
             background: transparent;
             position: relative;
             transition: all var(--transition-speed);
@@ -402,10 +492,6 @@
             opacity: 0.2;
         }
 
-        body.light-mode .prompt-box-wrapper-new::after {
-            color: var(--gradient-start);
-        }
-
         .prompt-actions-row {
             display: flex;
             justify-content: space-between;
@@ -431,6 +517,26 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-button-new::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .action-button-new:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         body.light-mode .action-button-new {
@@ -439,7 +545,7 @@
 
         .action-button-new:hover {
             filter: brightness(1.15);
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.05);
             box-shadow: 0 6px 15px rgba(108, 234, 199, 0.6);
         }
         
@@ -472,6 +578,7 @@
             color: var(--dark-text);
             background: var(--dark-card-bg);
             border-color: var(--gradient-end);
+            transform: translateY(-2px);
         }
 
         body.light-mode .small-button {
@@ -506,17 +613,19 @@
         .how-it-works-card {
             background-color: var(--dark-surface);
             padding: 2rem;
-            border-radius: 16px;
+            border-radius: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             transition: all var(--transition-speed);
+            border: 1px solid transparent;
         }
         .how-it-works-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(108, 234, 199, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(108, 234, 199, 0.3);
+            border-color: var(--gradient-end);
         }
         .how-it-works-card .icon {
             width: 64px;
@@ -524,12 +633,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--dark-card-bg);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             border-radius: 50%;
             margin-bottom: 1rem;
-            color: var(--gradient-end);
+            color: #121212;
             font-size: 1.8rem;
             font-weight: bold;
+            box-shadow: 0 4px 12px rgba(108, 234, 199, 0.4);
         }
         .how-it-works-card h3 {
             font-size: 1.25rem;
@@ -540,17 +650,27 @@
         .how-it-works-card p {
             font-size: 1rem;
             color: var(--dark-secondary-text);
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
         .section-heading {
             text-align: center;
-            font-weight: 800;
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 900;
+            font-size: clamp(1.8rem, 4vw, 3rem);
             margin-bottom: 3rem;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end), var(--accent-orange));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            margin: 1rem auto 0;
+            border-radius: 2px;
         }
 
         /* Chat UI (Hidden on landing page) */
@@ -584,9 +704,8 @@
             color: var(--light-text);
         }
 
-        /* NEW Mobile dropdown styles */
         .mobile-nav-links {
-            list-style: none; /* Removed bullets */
+            list-style: none;
             display: flex;
             flex-direction: column;
             position: fixed;
@@ -594,7 +713,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(10, 10, 10, 0.9);
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(12px);
             padding: 2rem;
             z-index: 999;
@@ -607,7 +726,7 @@
         }
 
         body.light-mode .mobile-nav-links {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
         }
 
@@ -645,9 +764,11 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             transition: box-shadow var(--transition-speed);
+            border: 1px solid var(--dark-border);
         }
         .accordion-item:hover {
             box-shadow: 0 8px 20px rgba(108, 234, 199, 0.2);
+            border-color: var(--gradient-end);
         }
         body.light-mode .accordion-item {
             background-color: var(--light-surface);
@@ -730,19 +851,21 @@
                 display: flex;
             }
             .hero {
-                padding: 4rem 1rem 2rem;
+                padding: 2.5rem 1rem 1rem;
             }
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             .hero p {
-                font-size: 1rem;
+                font-size: 0.95rem;
             }
             .prompt-section-container {
-                padding: 1.5rem;
+                padding: 0 1.5rem 1.5rem;
+                margin: 1rem auto 2rem;
             }
             .prompt-box-new {
                 font-size: 1rem;
+                padding: 1.5rem;
             }
             .how-it-works-grid {
                 display: none;
@@ -757,9 +880,6 @@
             }
             .secondary-buttons {
                 justify-content: center;
-            }
-            .prompt-box-wrapper-new::after {
-                display: none;
             }
             .accordion-container {
                 display: flex;
@@ -837,9 +957,8 @@
 
         <header class="hero">
             <h1>EnvisionFlow</h1>
-            <p>Your AI-powered launchpad for turning raw ideas into flawless blueprints. Stop dreaming, start building. The future of creation is here, and it's interactive.</p>
+            <p>Your AI-powered launchpad for turning raw ideas into flawless blueprints. Stop dreaming, start building.</p>
             <div class="hero-buttons">
-                <button class="cta-button" id="startVisionBtnHero">Launch Your Idea</button>
                 <a href="#how-it-works" class="cta-button-secondary">Learn How</a>
             </div>
         </header>
@@ -894,7 +1013,7 @@
                 </div>
                 
                 <div id="chatContainer" class="chat-container">
-                    </div>
+                </div>
             </section>
             
             <section id="how-it-works" class="accordion-section" style="margin-top: 5rem;">
@@ -1027,7 +1146,7 @@
                     </div>
                     <div class="accordion-item">
                         <button class="accordion-header" aria-expanded="false" aria-controls="content-about4">
-                            <h3>Hypy for Your Vision</h3>
+                            <h3>Hype for Your Vision</h3>
                             <span class="accordion-icon">+</span>
                         </button>
                         <div class="accordion-content" id="content-about4">
@@ -1096,6 +1215,16 @@
             startBuildingBtn.disabled = len === 0;
         });
 
+        // Enter key support for prompt box
+        projectDescription.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                if (!startBuildingBtn.disabled) {
+                    startBuildingBtn.click();
+                }
+            }
+        });
+
         attachLinkBtn.addEventListener('click', () => {
             linkInputContainer.style.display = 'block';
             linkInputContainer.querySelector('input').focus();
@@ -1113,7 +1242,6 @@
         startBuildingBtn.addEventListener('click', () => {
             const idea = projectDescription.value.trim();
             if (idea) {
-                // Store the initial idea in session storage
                 sessionStorage.setItem('initialIdea', idea);
                 window.location.href = 'chat.html';
             }

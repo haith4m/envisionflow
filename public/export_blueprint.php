@@ -1,9 +1,10 @@
 <?php
 session_start();
 //export_blueprint.php
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once 'vendor/autoload.php';
-
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -33,18 +34,28 @@ foreach ($blueprintData as $key => $value) {
     if ($key === 'project_name') {
         continue;
     }
+    
     // This will now correctly pull 'problem_statement', 'revenue_model', etc.
     $title = ucwords(str_replace('_', ' ', $key));
     $html .= "<h2>" . htmlspecialchars($title) . "</h2>";
-
+    
     if (is_array($value)) {
         $html .= "<ul>";
         foreach ($value as $item) {
-            $html .= "<li>" . htmlspecialchars($item) . "</li>";
+            // Check if $item itself is an array
+            if (is_array($item)) {
+                // Handle nested arrays - convert to readable string
+                $itemText = implode(', ', array_map(function($v) {
+                    return is_array($v) ? json_encode($v) : (string)$v;
+                }, $item));
+                $html .= "<li>" . htmlspecialchars($itemText) . "</li>";
+            } else {
+                $html .= "<li>" . htmlspecialchars((string)$item) . "</li>";
+            }
         }
         $html .= "</ul>";
     } else {
-        $html .= "<p>" . htmlspecialchars($value) . "</p>";
+        $html .= "<p>" . htmlspecialchars((string)$value) . "</p>";
     }
 }
 
@@ -53,8 +64,8 @@ $html .= '</body></html>';
 $options = new Options();
 $options->set('isHtml5ParserEnabled', true);
 $options->set('isRemoteEnabled', true);
-$dompdf = new Dompdf($options);
 
+$dompdf = new Dompdf($options);
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
